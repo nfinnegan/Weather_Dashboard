@@ -1,0 +1,25 @@
+.bg-dark {
+    text-align: center;
+    padding: 20px;
+}
+
+nav {
+    justify-content: flex-start;
+    position: fixed;
+    background-color: #eeee;
+    width: 30%;
+    height: 100vh;
+    padding-left: 15px;
+}
+
+.fa-search {
+    color: white
+}
+
+.btn {
+    background-color: blue;
+}
+
+/* .container {
+    border-style: solid black 1rem;
+} */
