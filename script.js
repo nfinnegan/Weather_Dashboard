@@ -1,7 +1,6 @@
-//var currentWeatherUrl = 'https://api.openweathermap.org/data/2.5/weather?q="+inputCityValue+"&units=imperial&appid=fe69a8ae1bfba9fa932a4b4358617cbf'
-//var fiveDayForecastUrl = 'https://api.openweathermap.org/data/2.5/forecast?q={cityname}&units=imperial&appid=fe69a8ae1bfba9fa932a4b4358617cbf'
+//add document ready
 var searchBtn = document.getElementById("searchBtn")
-
+var citiesArray=[];
 let today = moment().format("l");
 
 
@@ -17,8 +16,6 @@ function currentWeatherAPI(){
                 return response.json();
             })
             .then(function (data){
-               // console.log(data);
-                //displayCurrentWeather(data.items)
                 if(inputCity){
                     
                     var todayCard = $(".card-body")
@@ -38,51 +35,78 @@ function currentWeatherAPI(){
             })
         }
         
-        
+    convertCityLatLong(inputCity);    
 
 
 }
 
-function fiveDayForecastAPI() {
-    //let inputCity = $("#cityName").val();
-    let inputCity = "Chicago"
-    var fiveDayForecastUrl = 'https://api.openweathermap.org/data/2.5/forecast?q=' + inputCity + '&units=imperial&cnt=5&appid=fe69a8ae1bfba9fa932a4b4358617cbf'
+function convertCityLatLong(inputCity){
+   // let inputCity = $("#cityName").val();
+    //let inputCity = "Austin"
+    let directGeocodingAPI = 'http://api.openweathermap.org/geo/1.0/direct?q=' + inputCity + '&limit=5&appid=fe69a8ae1bfba9fa932a4b4358617cbf'
+    fetch(directGeocodingAPI)
+        .then(function(response){
+            return response.json();
+        })
+        .then(function(data){
+            console.log(data)
+            var lat = data[0].lat
+            var long = data[0].lon
+            console.log(lat,long)
+            fiveDayForecastAPI(lat,long)
+        })
+        
+        
+}
+
+
+
+    
+    function fiveDayForecastAPI(lat, long) {
+     console.log(lat,long)   
+    let fiveDayForecastUrl = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + lat + '&lon=' + long + '&exclude=minutely,hourly,alerts&cnt=5&units=imperial&appid=fe69a8ae1bfba9fa932a4b4358617cbf'
+
     fetch(fiveDayForecastUrl)
                 .then(function(response){
                 return response.json();
                 })
                 .then(function (dataItems){
                 console.log(dataItems);
-                    if(!dataItems.results.length){
+                    if(!dataItems.daily.length){
                         console.log("no results")
                         }
                     else{
-                    for (i=0;i < `${dataItems.list[i].length}`; i++){
-                        console.log(`${data.list}`)
-                        var forecastCards = $(".mt-3") //added second class to pull by this instead of card-body again  
-                        let cardTwoTitle= $("<h5 class='card-title'></h5>").appendTo(forecastCards).text("Date")
-                       // $("<img id='weatherIcon' src='' alt='weather icon'>").appendTo(forecastCards).attr('src',iconURL)
-                        $("<p class='card-text'></p>").appendTo(forecastCards).text("Temperature: ")
-                        $("<p class='card-text'></p>").appendTo(forecastCards).text("Humidity: ")
+                    for (i=0; i <= 4 ; i++){
+                        var item = dataItems.daily[i]
+                        var calendarDate = dataItems.daily[i].dt
+                        //moment(calendarDate).format("")
+                        console.log(calendarDate)
+                        var iconCode = item.weather[0].icon
+                       // console.log(iconCode)
+                        var iconURL = "http://openweathermap.org/img/wn/" + iconCode + ".png"
+                       let roundedTemp = Math.round(item.temp.day)
+                        var forecastCards = $(".mt-5") //added second class to pull by this instead of card-body again  
+                        let cardTwo = $("<div class='card text-white bg-primary mb-3 cardCSS'</div>").appendTo(forecastCards)
+                        $("<h5 class='card-title'></h5>").appendTo(cardTwo).text(item.dt_txt)
+                        $("<img id='weatherIcon' src='' alt='weather icon'>").appendTo(cardTwo).attr('src',iconURL)
+                        $("<p class='card-text'></p>").appendTo(cardTwo).text("Temperature: " + roundedTemp +"F")
+                        $("<p class='card-text'></p>").appendTo(cardTwo).text("Humidity: " + item.humidity)
                        
                         }
                     }  
-                //var iconCode = `${data.weather[0].icon}`
-               // var iconURL = "http://openweathermap.org/img/wn/" + iconCode + ".png"
 
             })
 }
 
 
 
-fiveDayForecastAPI()
+
 
 searchBtn.addEventListener("click",function(event){
     event.preventDefault();
     currentWeatherAPI();
-    let oldCities = JSON.parse(window.localStorage.getItem("City")) || []
+    let oldCities = JSON.parse(window.localStorage.getItem("City")) || [];
     oldCities.push(citiesArray)
-    var citiesArray=[]
     let cityValue = $("#cityName").val()
     citiesArray.push(cityValue)
     //for (i=0; i < cityValue.length; i++)
@@ -90,3 +114,6 @@ searchBtn.addEventListener("click",function(event){
 })
 
 
+function displayStorage() {
+    
+}
