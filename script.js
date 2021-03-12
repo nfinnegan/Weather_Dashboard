@@ -78,9 +78,11 @@ function convertCityLatLong(inputCity){
                     else{
                     for (i=0; i <= 4 ; i++){
                         var item = dataItems.daily[i]
-                        var calendarDate = dataItems.daily[i].dt
-                        //moment(calendarDate).format("")
-                        console.log(calendarDate)
+                        var unixDate = dataItems.daily[i].dt
+                        console.log(unixDate)
+                        var date = moment.unix(unixDate)
+                        console.log(date)
+                      
                         var iconCode = item.weather[0].icon
                        // console.log(iconCode)
                         var iconURL = "http://openweathermap.org/img/wn/" + iconCode + ".png"
@@ -111,9 +113,12 @@ searchBtn.addEventListener("click",function(event){
     citiesArray.push(cityValue)
     //for (i=0; i < cityValue.length; i++)
     window.localStorage.setItem("City", JSON.stringify(citiesArray));
+    $(".mt-5").empty();
+    
+
 })
 
 
 function displayStorage() {
-    
+
 }
