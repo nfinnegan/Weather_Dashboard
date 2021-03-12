@@ -53,13 +53,14 @@ function fiveDayForecastAPI() {
             })
                 .then(function (data){
                 console.log(data);
-                var iconCode = `${data.weather[0].icon}`
-                var iconURL = "http://openweathermap.org/img/wn/" + iconCode + ".png"
-                for (i=0;i < data.list.length; i++){
-                    
-                    var forecastCards = $(".forecastCards") //added second class to pull by this instead of card-body again  
+              
+                //var iconCode = `${data.weather[0].icon}`
+               // var iconURL = "http://openweathermap.org/img/wn/" + iconCode + ".png"
+                for (i=0;i < `${data.list[i].length}`; i++){
+                    console.log(`${data.list}`)
+                    var forecastCards = $(".mt-3") //added second class to pull by this instead of card-body again  
                     let cardTwoTitle= $("<h5 class='card-title'></h5>").appendTo(forecastCards).text("Date")
-                    $("<img id='weatherIcon' src='' alt='weather icon'>").appendTo(forecastCards).attr('src',iconURL)
+                   // $("<img id='weatherIcon' src='' alt='weather icon'>").appendTo(forecastCards).attr('src',iconURL)
                     $("<p class='card-text'></p>").appendTo(forecastCards).text("Temperature: ")
                     $("<p class='card-text'></p>").appendTo(forecastCards).text("Humidity: ")
                    
@@ -67,6 +68,8 @@ function fiveDayForecastAPI() {
 
             })
 }
+
+
 
 fiveDayForecastAPI()
 
