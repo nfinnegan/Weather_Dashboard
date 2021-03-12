@@ -28,20 +28,26 @@
         <h1 class="bg-dark text-white">Weather Dashboard</h1>
     </header>
     <body class="container-fluid">
-     <aside>
-        <nav class="flex-column d-inline-flex">Search for a City:
+     <div class="row">
+        <nav class="col-12 col-md-3 col-lg-3">Search for a City:
          <form class="form-inline">
             <input class="form-control inputCity" type="text" id="cityName" name="search for a city">
                 <div class="input-group-append">
                     <button class="btn btn-outline-secondary" id="searchBtn" type="button"><i class="fas fa-search"></i></button>
                 </div>
         </form>   
+        <ul class="searchHistory"></ul>
         </nav>
-     <div class="conatiner">
+       
+    
+        <div class="card cardOne col-md-9 col-lg-9">
+            <div class="card-body"></div>
+        </div>
 
-     </div>
-
-    </aside>
+        <div class='card text-white bg-primary mb-3' style='max-width: 18rem;'>
+            <div class="card-body forecastCards"></div>
+        </div>
+</div>
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->

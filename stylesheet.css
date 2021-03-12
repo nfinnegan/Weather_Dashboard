@@ -7,8 +7,6 @@ nav {
     justify-content: flex-start;
     position: fixed;
     background-color: #eeee;
-    width: 30%;
-    height: 100vh;
     padding-left: 15px;
 }
 
