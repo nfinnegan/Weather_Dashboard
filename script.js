@@ -5,20 +5,22 @@ let today = moment().format("l");
 
 
 function currentWeatherAPI(){
-    //$(".cardOne").show();
+    if($(".card-body")){
+        $(".card-body").empty()
+    }
    let inputCity = $("#cityName").val();
     var currentWeatherUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + inputCity + '&units=imperial&appid=fe69a8ae1bfba9fa932a4b4358617cbf'
         if(inputCity === ''){
             alert("Please enter a valid city")
         }
         else {
+            
             fetch(currentWeatherUrl)
                 .then(function (response){
                 return response.json();
             })
             .then(function (data){
                 if(inputCity){
-                    
                     var todayCard = $(".card-body")
                     var iconCode = `${data.weather[0].icon}`
                     var iconURL = "http://openweathermap.org/img/wn/" + iconCode + ".png" 
@@ -29,9 +31,10 @@ function currentWeatherAPI(){
                     $("<p class='card-text'></p>").appendTo(todayCard).text(`Humidity: ${data.main.humidity}%`)
                     $("<p class='card-text'></p>").appendTo(todayCard).text(`Wind Speed: ${data.wind.speed}`)
                     $("<p class='card-text'></p>").appendTo(todayCard).text("UV Index: ")
-
+                   
 
                 }
+               
             })
         }
         
@@ -106,7 +109,7 @@ searchBtn.addEventListener("click",function(event){
     //for (i=0; i < cityValue.length; i++)
     window.localStorage.setItem("City", JSON.stringify(citiesArray));
     $(".mt-5").empty();
-    //$(".cardOne").hide();
+    
 
 })
 
@@ -121,14 +124,16 @@ function displayStorage() {
     let inputHistory = JSON.parse(window.localStorage.getItem("City"))
     for (i=0; i < inputHistory.length; i++){
         let uoList = $(".searchHistory")
-        $("<li class=list-group-item data-city></li>").appendTo(uoList).text(inputHistory[i])
+        $("<li class= list-group-item ></li>").addClass("data-city").appendTo(uoList).text(inputHistory[i])
         }
-    }
+}
 
 $(document).on("click", ".data-city",function(event){
     event.preventDefault();
     let clickedCity = $(this)
-    currentWeatherAPI(clickedCity.text())
+    clickedCity.firstChild.innerText
+    console.log($(this))
+   // currentWeatherAPI(clickedCity.text())
 })
 
 
