@@ -2,15 +2,16 @@ $(document).ready(function(){
 var searchBtn = document.getElementById("searchBtn")
 var citiesArray=[];
 let today = moment().format("l");
-let inputCity = $("#cityName").val();
-console.log(inputCity);
 
-//runs current weather API (separate from One call)
+
+
+//runs current weather API (separate from One call API)
 function currentWeatherAPI(inputCity){
+   //clears current weather data if any pre-exists
     if($(".card-body")){
         $(".card-body").empty()
-    }
-   //let inputCity = $("#cityName").val();
+        }
+   
    
    //API call
     var currentWeatherUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + inputCity + '&units=imperial&appid=fe69a8ae1bfba9fa932a4b4358617cbf'
@@ -18,6 +19,7 @@ function currentWeatherAPI(inputCity){
                 .then(function (response){
                 return response.json();
             })
+
             //creates elements of top card dynamically
             .then(function (data){
                 if(inputCity){
@@ -65,6 +67,11 @@ function convertCityLatLong(inputCity){
     function fiveDayForecastAPI(lat, long) {  
     let fiveDayForecastUrl = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + lat + '&lon=' + long + '&exclude=minutely,hourly,alerts&cnt=5&units=imperial&appid=fe69a8ae1bfba9fa932a4b4358617cbf'
     
+    //clears 5 day forecast if any pre-exists
+    if($(".mt-5")){
+        $(".mt-5").empty()
+    }
+
     //API CALL
     fetch(fiveDayForecastUrl)
                 .then(function(response){
@@ -99,10 +106,11 @@ function convertCityLatLong(inputCity){
 
 
 
-
+//event listener to the search button and saves searches to localStorage
 searchBtn.addEventListener("click",function(event){
     event.preventDefault();
-    currentWeatherAPI();
+    let inputCity = $("#cityName").val();
+    currentWeatherAPI(inputCity);
     let oldCities = JSON.parse(window.localStorage.getItem("City")) || [];
     oldCities.push(citiesArray)
     let cityValue = $("#cityName").val()
@@ -114,6 +122,7 @@ searchBtn.addEventListener("click",function(event){
 
 })
 
+//loads any localStorage items & calls my display storage function to render on page
 if(!JSON.parse(window.localStorage.getItem("City"))){
     console.log("no history")
 }
@@ -121,6 +130,7 @@ else{
     displayStorage();
 }
 
+//gets items from localStorage and creates a list item for each one 
 function displayStorage() {
     let inputHistory = JSON.parse(window.localStorage.getItem("City"))
     for (i=0; i < inputHistory.length; i++){
@@ -129,14 +139,11 @@ function displayStorage() {
         }
 }
 
+//document listener for a click on anything with the class of .data-city, grabs text value in order to call APIs again
 $(document).on("click", ".data-city",function(event){
-    let clickedCity = event.target.getAttribute('.data-city')
-    var cityName = $(".data-city").html()
-    console.log(cityName)
-    if(cityName){
-        currentWeatherAPI(cityName)
-    }
-
+    let clickedCity = $(this).text()
+    console.log(clickedCity)
+    currentWeatherAPI(clickedCity)
 
 })
 
