@@ -2,23 +2,23 @@ $(document).ready(function(){
 var searchBtn = document.getElementById("searchBtn")
 var citiesArray=[];
 let today = moment().format("l");
+let inputCity = $("#cityName").val();
+console.log(inputCity);
 
-
-function currentWeatherAPI(){
+//runs current weather API (separate from One call)
+function currentWeatherAPI(inputCity){
     if($(".card-body")){
         $(".card-body").empty()
     }
-   let inputCity = $("#cityName").val();
+   //let inputCity = $("#cityName").val();
+   
+   //API call
     var currentWeatherUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + inputCity + '&units=imperial&appid=fe69a8ae1bfba9fa932a4b4358617cbf'
-        if(inputCity === ''){
-            alert("Please enter a valid city")
-        }
-        else {
-            
-            fetch(currentWeatherUrl)
+        fetch(currentWeatherUrl)
                 .then(function (response){
                 return response.json();
             })
+            //creates elements of top card dynamically
             .then(function (data){
                 if(inputCity){
                     var todayCard = $(".card-body")
@@ -36,16 +36,15 @@ function currentWeatherAPI(){
                 }
                
             })
-        }
+        
         
     convertCityLatLong(inputCity);    
 
 
 }
 
+//one call API for 5 day forecast only allows latitude and longitude, had to convert city name to lat/long to pass to 5 day forecast API
 function convertCityLatLong(inputCity){
-   // let inputCity = $("#cityName").val();
-    //let inputCity = "Austin"
     let directGeocodingAPI = 'http://api.openweathermap.org/geo/1.0/direct?q=' + inputCity + '&limit=5&appid=fe69a8ae1bfba9fa932a4b4358617cbf'
     fetch(directGeocodingAPI)
         .then(function(response){
@@ -62,14 +61,16 @@ function convertCityLatLong(inputCity){
 
 
 
-    
+    //gets 5 day forecast
     function fiveDayForecastAPI(lat, long) {  
     let fiveDayForecastUrl = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + lat + '&lon=' + long + '&exclude=minutely,hourly,alerts&cnt=5&units=imperial&appid=fe69a8ae1bfba9fa932a4b4358617cbf'
-
+    
+    //API CALL
     fetch(fiveDayForecastUrl)
                 .then(function(response){
                 return response.json();
                 })
+                //dynamically added elements for 5 day forecast
                 .then(function (dataItems){
                     if(!dataItems.daily.length){
                         console.log("no results")
@@ -129,11 +130,14 @@ function displayStorage() {
 }
 
 $(document).on("click", ".data-city",function(event){
-    event.preventDefault();
-    let clickedCity = $(this)
-    clickedCity.firstChild.innerText
-    console.log($(this))
-   // currentWeatherAPI(clickedCity.text())
+    let clickedCity = event.target.getAttribute('.data-city')
+    var cityName = $(".data-city").html()
+    console.log(cityName)
+    if(cityName){
+        currentWeatherAPI(cityName)
+    }
+
+
 })
 
 
