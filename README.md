@@ -35,8 +35,11 @@ THEN I am again presented with current and future conditions for that city
 
 
 ## Deployed Application
+Link to deployed application:   https://nfinnegan.github.io/Weather_Dashboard/
 
 ## Preview
+
+![Weather_Dashboard](assets/weatherdashboard.gif)
 
 ## Resources
 
