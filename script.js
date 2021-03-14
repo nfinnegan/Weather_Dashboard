@@ -25,7 +25,7 @@ function currentWeatherAPI(inputCity){
                 if(inputCity){
                     var todayCard = $(".card-body")
                     var iconCode = `${data.weather[0].icon}`
-                    var iconURL = "http://openweathermap.org/img/wn/" + iconCode + ".png" 
+                    var iconURL = "https://openweathermap.org/img/wn/" + iconCode + ".png" 
                     let tempRounded = Math.round(data.main.temp)
                     let cardOneTitle = $("<h2 class='card-title'></h2>").appendTo(todayCard).text(inputCity + " " + "("+today+")")
                     $("<img id='weatherIcon' src='' alt='weather icon'>").appendTo(cardOneTitle).attr('src',iconURL)
@@ -47,7 +47,7 @@ function currentWeatherAPI(inputCity){
 
 //one call API for 5 day forecast only allows latitude and longitude, had to convert city name to lat/long to pass to 5 day forecast API
 function convertCityLatLong(inputCity){
-    let directGeocodingAPI = 'http://api.openweathermap.org/geo/1.0/direct?q=' + inputCity + '&limit=5&appid=fe69a8ae1bfba9fa932a4b4358617cbf'
+    let directGeocodingAPI = 'https://api.openweathermap.org/geo/1.0/direct?q=' + inputCity + '&limit=5&appid=fe69a8ae1bfba9fa932a4b4358617cbf'
     fetch(directGeocodingAPI)
         .then(function(response){
             return response.json();
@@ -88,7 +88,7 @@ function convertCityLatLong(inputCity){
                         var unixDate = dataItems.daily[i].dt
                         var date = moment.unix(unixDate).format("l")
                         var iconCode = item.weather[0].icon
-                        var iconURL = "http://openweathermap.org/img/wn/" + iconCode + ".png"
+                        var iconURL = "https://openweathermap.org/img/wn/" + iconCode + ".png"
                         let roundedTemp = Math.round(item.temp.day)
                         var forecastCards = $(".mt-5") //added second class to pull by this instead of card-body again  
                         let cardTwo = $("<div class='card text-white bg-primary mb-3 cardCSS'</div>").appendTo(forecastCards)
